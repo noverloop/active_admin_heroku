@@ -33,6 +33,11 @@ module ActiveAdmin
           end
         end
 
+        def resource
+          r = super
+          r.respond_to?(:decorator) ? r.decorator : r
+        end
+
         protected
 
         def default_title
