@@ -125,10 +125,11 @@ module ActiveAdmin
         end
         
         def resource_decorator
-          # TODO: Use apropriate api to check existance of decorator as opposed to expecting a NameError
-          decorator_class_name = "#{ active_admin_config.resource_class_name }Decorator"
-          decorator_class_name.constantize
+          class_name = config[:decorator]
+          class_name ||= "#{ active_admin_config.resource_class_name }Decorator"
+          class_name.is_a?(String) ? class_name.constantize : class_name
         rescue NameError
+          # TODO: Use apropriate api to check existance of decorator as opposed to expecting a NameError
           nil
         end
 
