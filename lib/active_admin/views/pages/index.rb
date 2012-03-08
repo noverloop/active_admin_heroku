@@ -123,14 +123,18 @@ module ActiveAdmin
           empty_results_content = I18n.t("active_admin.pagination.empty", :model => active_admin_config.plural_resource_label)
           insert_tag(view_factory.blank_slate, empty_results_content)
         end
-        
+
         def resource_decorator
-          class_name = config[:decorator]
-          class_name ||= "#{ active_admin_config.resource_class_name }Decorator"
-          class_name.is_a?(String) ? class_name.constantize : class_name
-        rescue NameError
-          # TODO: Use apropriate api to check existance of decorator as opposed to expecting a NameError
-          nil
+          class_name = config.has_key?(:decorator) ? config[:decorator] : "#{ active_admin_config.resource_class.name }Decorator"
+
+          if class_name && Object.const_defined?(class_name.to_s)
+            class_name.is_a?(String) ? class_name.constantize : class_name
+          end
+        end
+
+        def decorated_collection(collection)
+          decorator = resource_decorator
+          (collection && decorator) ? decorator.decorate(collection) : collection
         end
 
         def render_index
@@ -143,16 +147,7 @@ module ActiveAdmin
                                            :download_links => download_links,
                                            :paginator      => paginator) do
             div :class => 'index_content' do
-              # Accessing collection directly was causing problems
-              # Hence the temporary 'c' variable
-
-              c = collection
-
-              if c && resource_decorator
-                c = resource_decorator.decorate(c)
-              end
-
-              insert_tag(renderer_class, config, c)
+              insert_tag(renderer_class, config, decorated_collection(collection))
             end
           end
         end

@@ -3,16 +3,11 @@ require 'spec_helper'
 
 describe ActiveAdmin::Views::Pages::Show do
 
-  describe "the resource collection" do
+  describe "the resource" do
+    let(:helpers) { mock(resource: resource) }
 
     context 'when the resource does not respond to #decorator' do
-      let(:helpers) do
-        Module.new.tap do |m|
-          def m.resource
-            'Test Resource'
-          end
-        end
-      end
+      let(:resource) { 'Test Resource' }
 
       it "normally returns the resource" do
         # puts helpers.resource
@@ -23,14 +18,10 @@ describe ActiveAdmin::Views::Pages::Show do
 
 
     context 'when the resource responds to #decorator' do
-      let(:helpers) do
-        Module.new.tap do |m|
-          def m.resource
-            'Test Resource'.tap do |r|
-              def r.decorator
-                'Decorated Resource'
-              end
-            end
+      let(:resource) do
+        'Test Resource'.tap do |r|
+          def r.decorator
+            'Decorated Resource'
           end
         end
       end
