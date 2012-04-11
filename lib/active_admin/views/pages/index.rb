@@ -110,7 +110,7 @@ module ActiveAdmin
             raise ArgumentError, "'as' requires a class or a symbol"
           end
         end
-        
+
         def render_blank_slate
           blank_slate_content = I18n.t("active_admin.blank_slate.content", :resource_name => active_admin_config.plural_resource_label)
           if controller.action_methods.include?('new')
@@ -118,7 +118,7 @@ module ActiveAdmin
           end
           insert_tag(view_factory.blank_slate, blank_slate_content)
         end
-        
+
         def render_empty_results
           empty_results_content = I18n.t("active_admin.pagination.empty", :model => active_admin_config.plural_resource_label)
           insert_tag(view_factory.blank_slate, empty_results_content)
@@ -127,9 +127,9 @@ module ActiveAdmin
         def resource_decorator
           class_name = config.has_key?(:decorator) ? config[:decorator] : "#{ active_admin_config.resource_class.name }Decorator"
 
-          if class_name && Object.const_defined?(class_name.to_s)
-            class_name.is_a?(String) ? class_name.constantize : class_name
-          end
+          class_name.is_a?(String) ? class_name.constantize : class_name
+        rescue NameError
+          nil
         end
 
         def decorated_collection(collection)

@@ -15,6 +15,11 @@ describe ActiveAdmin::Views::Pages::Index do
     end
   end
 
+  module ::FooBarModule
+    class FooBarDecorator
+    end
+  end
+
   let(:resource_class_name) { 'Foo' }
   let(:page_presenter) { ActiveAdmin::PagePresenter.new }
   let(:active_admin_config) { mock(:resource_class => mock(:name => resource_class_name)) }
@@ -60,23 +65,31 @@ describe ActiveAdmin::Views::Pages::Index do
       end
     end
 
-    describe '#decorated_collection' do
-      let(:collection) { ['test'] }
-      context 'When the resource has no decorator' do
-        it "normally returns back the original collection" do
-          page.decorated_collection(collection).should == collection
-        end
+    context 'When a decorator is configured that is namespaced' do
+      let(:page_presenter) { ActiveAdmin::PagePresenter.new decorator: 'FooBarModule::FooBarDecorator' }
+      it "Returns the constantized configured decorator" do
+        page.resource_decorator.should == ::FooBarModule::FooBarDecorator
       end
-
-      context 'given a decorator' do
-        let(:page_presenter) { ActiveAdmin::PagePresenter.new decorator: BarDecorator }
-        it "Returns a collection proxy" do
-          page.decorated_collection(collection).should be_kind_of(::BarDecorator::CollectionProxy)
-          page.decorated_collection(collection).collection.should == collection
-        end
-      end
-
     end
+
+  end
+
+  describe '#decorated_collection' do
+    let(:collection) { ['test'] }
+    context 'When the resource has no decorator' do
+      it "normally returns back the original collection" do
+        page.decorated_collection(collection).should == collection
+      end
+    end
+
+    context 'given a decorator' do
+      let(:page_presenter) { ActiveAdmin::PagePresenter.new decorator: BarDecorator }
+      it "Returns a collection proxy" do
+        page.decorated_collection(collection).should be_kind_of(::BarDecorator::CollectionProxy)
+        page.decorated_collection(collection).collection.should == collection
+      end
+    end
+
   end
 
 end
