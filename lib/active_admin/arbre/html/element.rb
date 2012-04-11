@@ -104,8 +104,11 @@ module Arbre
       def get_elements_by_class_name(class_name)
         elements = Collection.new
         children.each do |child|
-          elements << child if child.class_list =~ /#{class_name}/
-          elements.concat(child.get_elements_by_tag_name(tag_name))
+          if child.respond_to?(:class_list) && child.class_list =~ /#{class_name}/
+            elements << child 
+          end
+
+          elements.concat(child.get_elements_by_class_name(class_name))
         end
         elements
       end
