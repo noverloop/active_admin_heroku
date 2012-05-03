@@ -26,7 +26,7 @@ describe ActiveAdmin::Views::Pages::Index do
 
   let(:page) do
     ActiveAdmin::Views::Pages::Index.new({}, nil).tap do |page|
-      page.stub!(:active_admin_config => active_admin_config, config: page_presenter)
+      page.stub!(:active_admin_config => active_admin_config, :config => page_presenter)
     end
   end
 
@@ -38,14 +38,14 @@ describe ActiveAdmin::Views::Pages::Index do
     end
 
     context 'When a decorator is offered in configuration as a string' do
-      let(:page_presenter) { ActiveAdmin::PagePresenter.new decorator: 'BarDecorator' }
+      let(:page_presenter) { ActiveAdmin::PagePresenter.new :decorator => 'BarDecorator' }
       it "Returns the constantized configured decorator" do
         page.resource_decorator.should == BarDecorator
       end
     end
 
     context 'When a decorator is offered in configuration as a class' do
-      let(:page_presenter) { ActiveAdmin::PagePresenter.new decorator: BarDecorator }
+      let(:page_presenter) { ActiveAdmin::PagePresenter.new :decorator => BarDecorator }
       it "Returns the configured decorator" do
         page.resource_decorator.should == BarDecorator
       end
@@ -58,7 +58,7 @@ describe ActiveAdmin::Views::Pages::Index do
       end
 
       context 'and configuration specifies not to use the decorator' do
-        let(:page_presenter) { ActiveAdmin::PagePresenter.new decorator: nil }
+        let(:page_presenter) { ActiveAdmin::PagePresenter.new :decorator => nil }
         it "returns no decorator" do
           page.resource_decorator.should == nil
         end
@@ -66,7 +66,7 @@ describe ActiveAdmin::Views::Pages::Index do
     end
 
     context 'When a decorator is configured that is namespaced' do
-      let(:page_presenter) { ActiveAdmin::PagePresenter.new decorator: 'FooBarModule::FooBarDecorator' }
+      let(:page_presenter) { ActiveAdmin::PagePresenter.new :decorator => 'FooBarModule::FooBarDecorator' }
       it "Returns the constantized configured decorator" do
         page.resource_decorator.should == ::FooBarModule::FooBarDecorator
       end
@@ -83,7 +83,7 @@ describe ActiveAdmin::Views::Pages::Index do
     end
 
     context 'given a decorator' do
-      let(:page_presenter) { ActiveAdmin::PagePresenter.new decorator: BarDecorator }
+      let(:page_presenter) { ActiveAdmin::PagePresenter.new :decorator => BarDecorator }
       it "Returns a collection proxy" do
         page.decorated_collection(collection).should be_kind_of(::BarDecorator::CollectionProxy)
         page.decorated_collection(collection).collection.should == collection

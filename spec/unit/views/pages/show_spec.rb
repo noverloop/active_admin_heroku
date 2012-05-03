@@ -4,7 +4,7 @@ require 'spec_helper'
 describe ActiveAdmin::Views::Pages::Show do
 
   describe "the resource" do
-    let(:helpers) { mock(resource: resource) }
+    let(:helpers) { mock(:resource => resource) }
 
     context 'when the resource does not respond to #decorator' do
       let(:resource) { 'Test Resource' }
