@@ -29,8 +29,13 @@ module ActiveAdmin
 
         def attributes_table(*args, &block)
           panel(I18n.t('active_admin.details', :model => active_admin_config.resource_label)) do
-            attributes_table_for resource, *args, &block
+            attributes_table_for resource_with_decorator, *args, &block
           end
+        end
+
+        def resource_with_decorator
+          r = resource
+          r.respond_to?(:decorator) ? r.decorator : r
         end
 
         protected
