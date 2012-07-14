@@ -4,7 +4,7 @@ module ActiveAdmin
 
       def build
         super :id => "footer"
-        powered_by_message
+        #powered_by_message
       end
 
       private
