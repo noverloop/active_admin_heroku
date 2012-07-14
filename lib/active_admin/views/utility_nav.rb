@@ -22,7 +22,7 @@ module ActiveAdmin
       end
 
       def build_logout_link
-        if @namespace.logout_link_path
+        if @namespace.logout_link_path and not session[:heroku_sso]
           text_node helpers.link_to(I18n.t('active_admin.logout'), active_admin_logout_path, :method => logout_method)
         end
       end

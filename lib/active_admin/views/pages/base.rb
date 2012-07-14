@@ -37,12 +37,17 @@ module ActiveAdmin
         def build_page
           within @body do
             div :id => "wrapper" do
+              build_heroku_nav if session[:heroku_sso]
               build_header
               build_title_bar
               build_page_content
               build_footer
             end
           end
+        end
+
+        def build_heroku_nav
+          text_node $heroku_nav.html_safe # set in initializer
         end
 
         def build_header

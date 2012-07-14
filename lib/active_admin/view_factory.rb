@@ -2,7 +2,7 @@ require 'active_admin/abstract_view_factory'
 
 module ActiveAdmin
   class ViewFactory < AbstractViewFactory
-
+    
     # Register Helper Renderers
     register  :global_navigation    => ActiveAdmin::Views::TabbedNavigation,
               :site_title           => ActiveAdmin::Views::SiteTitle,
